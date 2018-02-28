@@ -1,0 +1,44 @@
+cc_green="\033[0;32m"
+cc_blue="\033[0;34m"
+cc_nocolor="\033[0m"
+
+# compiler flags
+CC += -fopenmp
+# Base Paths
+MODE = release
+
+LIBPATH := ../lib
+BASELIBPATH :=  -L${LIBPATH} 
+
+ifeq ($(MODE), debug)
+GG = -g
+endif
+CC = g++ -fPIC $(GG) -O3 -fopenmp -fvisibility=hidden -Lusr/local/lib -std=c++11
+
+### OPENMESH
+OPENMESHINCPATH := -I/home/mathias/Thirdparty/OpenMesh/OpenMesh-6.2/Release/include
+OPENMESHLIBPATH := /home/mathias/Thirdparty/OpenMesh/OpenMesh-6.2/Release/lib/libOpenMeshCore.a /home/mathias/Thirdparty/OpenMesh/OpenMesh-6.2/Release/lib/libOpenMeshTools.a
+
+### BOOST
+BOOSTINCPATH := -I/home/mathias/Thirdparty/boost_1_61_0/release/include
+BOOSTLIBPATH := /home/mathias/Thirdparty/boost_1_61_0/release/lib/
+BOOSTFILESYSTEMLIBPATH := $(BOOSTLIBPATH)/libboost_filesystem.a  $(BOOSTLIBPATH)/libboost_system.a
+BOOSTIONIOSTREAMLIBPATH := $(BOOSTLIBPATH)/libboost_iostreams.a -lz
+# BOOSTSERIALIZATIONLIBPATHSTAT :=  $(BOOSTLIBPATH)/libboost_serialization.a
+
+### Eigen
+EIGENINCPATH := -I/usr/include/eigen3/
+
+### Embree
+EMBREEINCPATH := -I/home/mathias/Thirdparty/embree-2.11.0.x86_64.linux/include -I/home/mathias/Thirdparty/tbb/tbb2017_20170412ossi/include
+EMBREELIBPATH := -L/home/mathias/Thirdparty/embree-2.11.0.x86_64.linux/lib -lembree -L/home/mathias/Thirdparty/tbb/tbb2017_20170412oss/lib/ -ltbb
+
+### Opencv
+OPENCVPATH := $(HOMEPATH)/Thirdparty/opencv/opencv-3.1.0/ReleaseCpu/
+
+OPENCVINCPATH := -I/$(OPENCVPATH)/include
+LIBOCVCORE := $(OPENCVPATH)/lib/libopencv_core.a -ldl
+LIBOCVCALIB3D := $(OPENCVPATH)/lib/libopencv_calib3d.a
+LIBOCVIMGPROC := $(OPENCVPATH)/lib/libopencv_imgproc.a
+LIBOCVHIGHGUI := $(OPENCVPATH)/lib/libopencv_highgui.a $(OPENCVPATH)/lib/libopencv_imgcodecs.a -lz $(OPENCVPATH)/lib/libopencv_imgcodecs.a -pthread -lgtk-3 -lgdk-3 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
+LIBOCVEXTRA := -lpng -ltiff -lz -ljpeg

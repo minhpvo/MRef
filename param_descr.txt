@@ -1,0 +1,57 @@
+// Specifie the amount of output 
+#VerboseLevel
+
+// First pyramid level for reconstruction (0=full resolution)
+#StartPyr
+
+// Last pyramid level for reconstruction (0=full resolution)
+#EndPyr
+
+// Iterations of geometric refinement per level [lev0,lev1,...]
+#RefineIterations
+
+// Weight of photometric data term per level [lev0,lev1,...]
+#PhotoWeights
+
+// Weight of thinplate smoothness term per level [lev0,lev1,...]
+#SmoothWeights",_smoothweightvec);
+
+// Switch to enable semantic maps for geometric reconstruction [lev0,lev1,...]
+#UseSemanticData
+
+// Weight of semantic data term per level [lev0,lev1,...]
+#SemDataWeights
+
+// Switch to enable the class specific smoothing 
+#UseSemanticSmooth
+
+// Class weights for the semantic smoothing per level [lev0, lev1,...] 
+#SemSmoothWeightsWater
+#SemSmoothWeightsFacade
+#SemSmoothWeightsGround
+#SemSmoothWeightsRoof
+#SemSmoothWeightsVege
+#UseStraightEdgeGrad
+#StraightEdgeWeights
+
+// Switch to enable MRF-based semantic labeling
+#UseMrfLabeling
+
+// Definition of geometric itereations to skip before invoke relabeling again
+#SkipIterations
+
+// Number of iterations for LBP of semantic labeling
+#MrfIterations
+
+// Weight of smoothnes term within semantic labeling
+#MrfSmoothWeights
+
+// Enables copying the data before reprocessing, might be helpful for cluster processing 
+#PrepareData
+
+// Raytracing parameter to specify the ditance of the nearest triangels
+#Tnear
+
+// Raytracing parameter to specify the ditance of the furthest triangels
+#Tfar
+
