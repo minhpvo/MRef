@@ -29,6 +29,16 @@ RayTracer.o: RayTracer.h RayTracer.cpp
 	${CC} ${CFLAGS} -c RayTracer.cpp ${IFLAGS}
 	@echo ${cc_green}... DONE${cc_nocolor}
 
+test_tracer.o: test_tracer.cpp
+	@echo ${cc_green}Compile test_tracer.cpp...${cc_nocolor}
+	${CC} ${CFLAGS} -c test_tracer.cpp ${IFLAGS}
+	@echo ${cc_green}... Done ${cc_nocolor}
+
+test_tracer: test_tracer.o ${OBJECTS}
+	@echo ${cc_green}Link test_tracer...${cc_nocolor}
+	${CC} ${CCFLAGS} -o test_tracer test_tracer.o ${OBJECTS} ${LFLAGS}
+	@echo ${cc_green}...Done ${cc_nocolor}
+
 libraytracer.a : ${OBJECTS}
 	@echo ${cc_green} Archive...${cc_nocolor}
 	ar rcs libraytracer.a ${OBJECTS}

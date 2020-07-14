@@ -98,7 +98,7 @@ test_grad.o: test_grad.cpp
 test_grad: test_grad.o ${OBJECTS}
 	@echo ${cc_green}Link test_grad...${cc_nocolor}
 	${CC} ${CCFLAGS} -o meshrefine test_grad.o ${OBJECTS} ${LFLAGS}
-	@mv meshrefine ../bin
+	@cp meshrefine ../bin
 	@echo ${cc_green}...Done ${cc_nocolor}
 
 libgradcalcstereo.a : ${OBJECTS}
