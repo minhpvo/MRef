@@ -2,7 +2,8 @@
 // author: mathias, 2017, mathias.rothermel@geod.baug.ethz.ch
 #include "ViewSelector.h"
 #include <iostream>
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
+//#include <opencv2/core/core.hpp>
 
 ViewSelector::ViewSelector(const IOList& orilist, const MeshMetaData& mmd) : _mmd(mmd)
 {
@@ -148,7 +149,7 @@ void ViewSelector::setClosestNeighborsDistance(	std::vector<int>& nadircluster,
 	    	{
 		    	distancevec.at<double>(0,m)=(_orivec[nadircluster[i]].getC()-_orivec[nadircluster[m]].getC()).norm();
 	    	}
-		cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+		cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 		std::vector<int> matchimages(std::min((int)nadircluster.size()-1,maxnummatchimages));
 	    	for(int m=1; m<matchimages.size()+1;m++)
@@ -191,7 +192,7 @@ void ViewSelector::getAdjacencyTileNadir(Eigen::MatrixXf& adjacency)
 		    	{
 			    	distancevec.at<double>(0,m)=(_orivec[baseimages[c][i]].getC()-_orivec[m].getC()).norm();
 		    	}
-			cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+			cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 			std::vector<int> matchimages(MAXNUMMATCH);
 		    	for(int m=1; m<std::min((int)_orivec.size(),MAXNUMMATCH+1);m++)
@@ -372,7 +373,7 @@ std::vector<std::vector<int>> ViewSelector::nearestMidPointImagesFromCluster(con
 		    	distancevec.at<double>(0,j)=sqrt(pow(ipt(0)-colsm,2)+pow(ipt(1)-rowsm,2));
 
 	    	}
-		cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+		cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 		for(int h=0;h<std::min(maxnumviews,(int)_clustervec[i].size());h++)
 		{
@@ -403,7 +404,7 @@ std::vector<std::vector<int>> ViewSelector::nearestImagesFromCluster( const int&
 		    	distancevec.at<double>(0,j)=(_orivec[_clustervec[i][j]].getC()-mpt).norm();
 		    //std::cout<<"\n"<<distancevec.at<double>(0,j);
 	    	}
-		cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+		cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 		for(int h=0;h<std::min(maxnumviews,(int)_clustervec[i].size());h++)
 		{
@@ -453,7 +454,7 @@ std::vector<int> ViewSelector::nearestNeighborsInCluster(const int imgidx, const
     		{
 		    	distancevec.at<double>(0,j)=(_orivec[cluster[j]].getC()-C).norm();
     		}
-		cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+		cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 		for(int h=0;h<std::min(maxnumviews,(int)clustersize);h++)
 		{
@@ -491,7 +492,7 @@ std::vector<int> ViewSelector::nearestNeighborsInCluster(const int imgidx, const
     		{
 	    		distancevec.at<double>(0,j)=(_orivec[subset[j]].getC()-C).norm();
     		}
-		cv::sortIdx(distancevec,indexvec,CV_SORT_ASCENDING);
+		cv::sortIdx(distancevec,indexvec,cv::SORT_ASCENDING);
 
 		for(int h=0;h<std::min(maxnumviews,(int)subset.size());h++)
 		{
@@ -662,7 +663,7 @@ void ViewSelector::computeOriCors(	const Orientation& baseori,
 	}
 	// Sort the thing
 	cv::Mat order;
-	cv:sortIdx(distances,order,CV_SORT_DESCENDING);
+	cv:sortIdx(distances,order,cv::SORT_DESCENDING);
 
 	// Check translation
 	indices=indexvec;
