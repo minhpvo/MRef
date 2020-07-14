@@ -9,9 +9,9 @@ int main()
     	ControlRefine cr;
 
 	// Save it
-    	std::string savename("/home/mathias/AlmostTrash/ControlRefine.txt");
-
-	cr.readFile(savename);
+  std::string readname("../data/ControlRefine.txt");
+	std::string savename("./ControlRefine.txt");
+	cr.readFile(readname);
 	cr.writeFile(savename);
 	return 1;
 

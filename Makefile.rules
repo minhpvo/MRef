@@ -1,0 +1,46 @@
+cc_green="\033[0;32m"
+cc_blue="\033[0;34m"
+cc_nocolor="\033[0m"
+
+# compiler flags
+CC += -fopenmp
+# Base Paths
+#MODE = release
+MODE = debug
+
+LIBPATH := ../lib
+BASELIBPATH :=  -L${LIBPATH}
+
+ifeq ($(MODE), debug)
+GG = -g
+endif
+CC = g++ -fPIC $(GG) -O0 -v -fopenmp -fvisibility=hidden -Lusr/local/lib -std=c++11
+
+### OPENMESH
+OPENMESHINCPATH := -I/home/centos/thirdparty/OpenMesh-6.2/installs/include
+OPENMESHLIBPATH := /home/centos/thirdparty/OpenMesh-6.2/installs/lib/libOpenMeshCore.a /home/centos/thirdparty/OpenMesh-6.2/installs/lib/libOpenMeshTools.a
+
+### BOOST
+BOOSTINCPATH := -I/usr/local/include/boost
+BOOSTLIBPATH := /usr/local/lib
+BOOSTFILESYSTEMLIBPATH := $(BOOSTLIBPATH)/libboost_filesystem.a  $(BOOSTLIBPATH)/libboost_system.a
+BOOSTIONIOSTREAMLIBPATH := $(BOOSTLIBPATH)/libboost_iostreams.a -lz
+# BOOSTSERIALIZATIONLIBPATHSTAT :=  $(BOOSTLIBPATH)/libboost_serialization.a
+
+### Eigen
+EIGENINCPATH := -I/usr/local/include/eigen3/
+
+### Embree
+# GAH an initial `sudo /sbin/ldconfig -v` fixed this problem!!
+EMBREEINCPATH := -I/home/centos/thirdparty/embree-2.11.0.x86_64.linux/include
+EMBREELIBPATH := -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib -lembree -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib -ltbb -L/home/centos/thirdparty/embree/build/lib/libembree.so
+
+### Opencv
+OPENCVPATH := /usr/local
+
+OPENCVINCPATH := -I$(OPENCVPATH)/include/opencv4
+LIBOCVCORE := $(OPENCVPATH)/lib64/libopencv_core.so -ldl
+LIBOCVCALIB3D := $(OPENCVPATH)/lib64/libopencv_calib3d.so
+LIBOCVIMGPROC := $(OPENCVPATH)/lib64/libopencv_imgproc.so
+LIBOCVHIGHGUI := $(OPENCVPATH)/lib64/libopencv_highgui.so $(OPENCVPATH)/lib64/libopencv_imgcodecs.so -lz $(OPENCVPATH)/lib64/libopencv_imgcodecs.so -pthread -lgtk-3 -lgdk-3 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lpangocairo-1.0 -lgdk_pixbuf-2.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
+LIBOCVEXTRA := -lpng -ltiff -lz -ljpeg
