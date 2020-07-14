@@ -8,7 +8,7 @@ IFLAGS = $(BASEINCPATH) \
 	 $(OPENMESHINCPATH) \
 	 $(BOOSTINCPATH)
 
-LFLAGS =  $(BASELIBPATH) -lprstimer -lconvolution -liolist -lmeshmrf -lgraphmrf -lgcopt -lprsori -llikelihoodimage -lraytracer -lmeshutil  -lmeshmetadata -lfdutil -lcontrol \
+LFLAGS =  $(BASELIBPATH) -lprstimer -lconvolution -liolist -lmeshmrf -lgraphmrf -lprsori -llikelihoodimage -lraytracer -lmeshutil  -lmeshmetadata -lfdutil -lcontrol \
 	  $(EMBREELIBPATH) \
 	  $(OPENCVLIBPATH) $(LIBOCVHIGHGUI) $(LIBOCVCALIB3D) $(LIBOCVIMGPROC) $(LIBOCOBJDETECT)  $(LIBOCVCORE) $(LIBOCVEXTRA)\
 	  $(BOOSTFILESYSTEMLIBPATH) \

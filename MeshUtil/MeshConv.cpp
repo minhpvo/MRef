@@ -130,7 +130,7 @@ void faceLabelToFaceColorICCV(MyMesh &mesh)
 		{
 			mesh.set_color(*f_it, MyMesh::Color(200,200,0));
 		}
-		else if(s==4) //Vegetation
+		else if(s==4) //Clutter
 		{
 			mesh.set_color(*f_it, MyMesh::Color(0, 0,200));
 		}

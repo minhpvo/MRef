@@ -17,9 +17,9 @@ ControlRefine::~ControlRefine()
 
 void ControlRefine::init()
 {
-	_startlevel=4;
+	_startlevel=0;
 
-	_endlevel=1;
+	_endlevel=0;
 
 	_usesemanticsmooth=false;
 
@@ -44,29 +44,29 @@ void ControlRefine::init()
 	// Weight semantic data
 	_usesemanticdata=false;
 	_semweightvec.resize(8);
-	for(int i=0; i<8; i++) { _semweightvec[i]=0.0; }
+	for(int i=0; i<8; i++) { _semweightvec[i]=0.2; }
 	_usesemanticsmooth=false;
 	_smoothwaterweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothwaterweightvec[i]=0.0; }
+	for(int i=0; i<8; i++) { _smoothwaterweightvec[i]=0.8; }
 	_smoothfacadeweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothfacadeweightvec[i]=0.0; }
+	for(int i=0; i<8; i++) { _smoothfacadeweightvec[i]=0.2; }
 	_smoothgroundweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothgroundweightvec[i]=0.0; }
+	for(int i=0; i<8; i++) { _smoothgroundweightvec[i]=0.6; }
 	_smoothroofweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothroofweightvec[i]=0.0; }
+	for(int i=0; i<8; i++) { _smoothroofweightvec[i]=0.1; }
 	_smoothvegeweightvec.resize(8);
 	for(int i=0; i<8; i++) { _smoothvegeweightvec[i]=0.0; }
 	
-	_usestraightedgegrad=false;
+	_usestraightedgegrad=true;
 	_straightedgeweightvec.resize(8);
-	for(int i=0; i<8; i++) { _straightedgeweightvec[i]=0.1; }
+	for(int i=0; i<8; i++) { _straightedgeweightvec[i]=0.3; }
 	
-	_usemrflabelsmoothing=false;
+	_usemrflabelsmoothing=true;
 	_skipiterations=5;
 	_nummrfitervec.resize(8);
-	for(int i=0; i<8; i++) { _nummrfitervec[i]=0.1; }
+	for(int i=0; i<8; i++) { _nummrfitervec[i]=40; }
 	_mrfsmoothvec.resize(8);
-	for(int i=0; i<8; i++) { _mrfsmoothvec[i]=0.1; }
+	for(int i=0; i<8; i++) { _mrfsmoothvec[i]=0.2; }
 
 	_preparedata=false;
 
