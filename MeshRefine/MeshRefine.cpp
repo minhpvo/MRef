@@ -265,6 +265,9 @@ void MeshRefine::process() {
   double pixsize;
   int nm;
   int image_pairs;
+  const int nrows = _ctr->_nrows; //600;
+  const int ncols = _ctr->_ncols; //1066;
+  const int nlabels = _ctr->_nlabels; //7;
 
   std::vector <Orientation> orivec;
   computeAdaptedOrientation(orivec);
@@ -302,7 +305,7 @@ void MeshRefine::process() {
         }
         // TODO (MAC) Number of labels is hard-coded here -- this, and the
         //  likelihood class -- should be watched for specific row/column/label sizes
-        MeshMRF meshmrf(_mesh, _mmd, 7);
+        MeshMRF meshmrf(_mesh, _mmd, nlabels);
         meshmrf.process(_imglistsem->getList(), _orilist->getList(), _ctr->_nummrfitervec[pyr]);
       }
       if (_verboselevel >= 0) {
@@ -338,7 +341,7 @@ void MeshRefine::process() {
 
           LikelihoodImage limg0;
           if (_ctr->_usesemanticdata) {
-            limg0.loadImage(_imglistsem->getElement(i));
+            limg0.loadImage(_imglistsem->getElement(i), nrows, ncols, nlabels);
             limg0.downscale(pyr);
           }
 
@@ -365,7 +368,7 @@ void MeshRefine::process() {
               if (img1.type() != CV_8UC1) { img1.convertTo(img1, CV_8UC1, 255); }
               LikelihoodImage limg1;
               if (_ctr->_usesemanticdata) {
-                limg1.loadImage(_imglistsem->getElement(j));
+                limg1.loadImage(_imglistsem->getElement(j), nrows, ncols, nlabels);
                 limg1.downscale(pyr);
               }
               timer2.stop();

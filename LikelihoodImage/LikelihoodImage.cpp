@@ -145,7 +145,7 @@ void LikelihoodImage::setLayer(const int layer, cv::Mat &img) {
   }
 }
 
-void LikelihoodImage::loadImage(const std::string &name) {
+void LikelihoodImage::loadImage(const std::string &name, const int rows, const int cols, const int labels) {
 
   FILE *pFile;
   long lSize;
@@ -182,9 +182,9 @@ void LikelihoodImage::loadImage(const std::string &name) {
   uint8_t *ptr = (uint8_t *) buffer;
 //	 TODO: (MAC) This is just hard-coded for now to make it work
 //    but it definitely needs to be fixed
-  _rows = 1080;
-  _cols = 1920;
-  _labels = 7;
+  _rows = rows;
+  _cols = cols;
+  _labels = labels;
   int label_offset = 3; // to compensate for last 3 RGB values
   // note that the last class (8th) is "shadow" and is also ignored
 

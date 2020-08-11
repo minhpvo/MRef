@@ -204,7 +204,6 @@ void MeshMRF::calcDataCosts(const std::vector <std::string> &imglist, const std:
   int s, x, y, l, i, tid;
   int lastcols = -1;
   int lastrows = -1;
-  int cols, rows;
   double allpercvalid = 0.0;
   cv::Mat TIDimg;
 
@@ -242,11 +241,11 @@ void MeshMRF::calcDataCosts(const std::vector <std::string> &imglist, const std:
     // Load the image
     LikelihoodImage *limage = new LikelihoodImage();
     std::cout << " s - imglist[s]: " << s << " - " << imglist[s] << std::endl;
-    limage->loadImage(imglist[s]);
+    int rows = ori.rows();
+    int cols = ori.cols();
 
-    int cols = limage->cols();
-    int rows = limage->rows();
-    _numlabels = limage->labels();
+
+    limage->loadImage(imglist[s], rows, cols, _numlabels);
 
     //Debugstuff
     //cv::Mat out(rows,cols,CV_32F);
@@ -255,12 +254,6 @@ void MeshMRF::calcDataCosts(const std::vector <std::string> &imglist, const std:
     //ImgIO::saveVisFloat(out,savename);
     //exit(1);
 
-    // Check if input is sane
-    if (cols != ori.cols() || rows != ori.rows()) {
-      std::cout << "MeshMRF.cpp: Image and ori cols/rows differ, exit." << std::endl;
-      std::cout << rows << "<->" << ori.rows() << " " << cols << "<->" << ori.cols() << std::endl;
-      exit(1);
-    }
     // Set the ray tracer
     _rtracer->setView(TFAR, TNEAR, ori);
 

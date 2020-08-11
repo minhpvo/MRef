@@ -13,7 +13,11 @@ class ControlRefine
 
 	void writeFile(const std::string& name);
 	void readFile(const std::string& name);
-	
+
+	int _verboselevel;
+	int _nrows;
+	int _ncols;
+	int _nlabels;
 	int _startlevel;
 	int _endlevel;
 
@@ -51,8 +55,6 @@ class ControlRefine
 
 	double _tnear;
 	double _tfar;
-
-	int _verboselevel;
 
     private:
 
