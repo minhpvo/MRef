@@ -22,14 +22,10 @@ struct MyTraits : public OpenMesh::DefaultTraits
   VertexTraits
   {
     private:
-    float _confidence;
     int _classification;
 
     public:
-    VertexT() : _classification(0), _confidence(0) { }
-
-    const int& confidence() const {return _confidence; }
-    void setconfidence(const float& vid) { _confidence = vid; }
+    VertexT() : _classification(0) { }
 
     const int& classification() const {return _classification; }
     void setclassification(const int& vid) { _classification = vid; }
