@@ -424,7 +424,7 @@ void MeshRefine::process() {
       smoothgen.assignGrad(GradThinPlate::LaplacianMode::KOBBELT);
       if (_ctr->_usesemanticsmooth) {
         // roof -> 2 | facade -> 0 | ground -> 1 | veg -> 3
-        std::vector<float> penalties(7);
+        std::vector<float> penalties(nlabels);
         // Set the penalties for level
         penalties[0] = _ctr->_smoothweightvecunknown[pyr]; // unknown
         penalties[1] = _ctr->_smoothweightvecmobile[pyr]; //mobile
