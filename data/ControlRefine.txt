@@ -1,0 +1,47 @@
+
+#VerboseLevel = 2
+
+#StartPyr = 0
+
+#EndPyr = 0
+
+#RefineIterations = [ 5 5 5 5 5 5 5 5 ]
+
+#PhotoWeights = [ 0.2 240 240 240 240 240 240 240 ]
+
+#SmoothWeights = [ 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ]
+
+#UseSemanticData = 0
+
+#SemDataWeights = [ 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 ]
+
+#UseSemanticSmooth = 0
+
+#SemSmoothWeightsWater = [ 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 ]
+
+#SemSmoothWeightsFacade = [ 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 ]
+
+#SemSmoothWeightsGround = [ 0.6 0.6 0.6 0.6 0.6 0.6 0.6 0.6 ]
+
+#SemSmoothWeightsRoof = [ 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 ]
+
+#SemSmoothWeightsVege = [ 0 0 0 0 0 0 0 0 ]
+
+#UseStraightEdgeGrad = 1
+
+#StraightEdgeWeights = [ 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 ]
+
+#UseMrfLabeling = 1
+
+#SkipIterations = 5
+
+#MrfIterations = [ 4 4 4 4 4 4 4 4 ]
+
+#MrfSmoothWeights = [ 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 ]
+
+#PrepareData = 0
+
+#Tnear = 10.0
+
+#Tfar = 1000
+

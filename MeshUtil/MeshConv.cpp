@@ -40,7 +40,7 @@ void openMeshToVectors( const MyMesh &ommesh, std::vector<std::vector<float> > &
 			v++;
 	   	}
 		labels[facecount]=ommesh.data(*f_it).labelid();
-    		facecount++;
+    facecount++;
 	}
 }
 
@@ -93,18 +93,99 @@ void faceColorToFaceLabel(MyMesh &mesh)
 	}
 }
 
-void faceLabelToFaceColor(MyMesh &mesh)
+void vertexAlphaToVertexLabel(MyMesh &mesh)
 {
+  unsigned char r, g, b, al;
+  int s;
+	// unsigned short s;
 
-    	unsigned char first, second;
-	unsigned short s;
-
-    	for (MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it)
+  for(MyMesh::VertexIter v_it=mesh.vertices_begin(); v_it!=mesh.vertices_end(); ++v_it)
 	{
-		s=mesh.data(*f_it).labelid();
-		first= s >> 8;
-		second = s & 0x00ff;
-		mesh.set_color(*f_it, MyMesh::Color(first,second,first+second));
+		const MyMesh::Color& c=mesh.color(*v_it);
+		r=c[0];
+		g=c[1];
+		b=c[2];
+		al=c[3];
+
+		s = static_cast<int>(al);
+		mesh.data(*v_it).setclassification(s);
+    mesh.set_color(*v_it, MyMesh::Color(r,g,b,al));
+    
+	}
+}
+
+void vertexRGBToVertexGreyLabel(MyMesh &mesh)
+{
+  unsigned char r, g, b, al;
+  int s;
+  float rgbavg;
+	// unsigned short s;
+
+  for(MyMesh::VertexIter v_it=mesh.vertices_begin(); v_it!=mesh.vertices_end(); ++v_it)
+	{
+		const MyMesh::Color& c=mesh.color(*v_it);
+		r=c[0];
+		g=c[1];
+		b=c[2];
+		al=c[3];
+		rgbavg = static_cast<float>(r+g+b)/3.0;
+
+		s = static_cast<int>( rgbavg*6.0/255.0 );
+		mesh.data(*v_it).setclassification(s);
+    mesh.set_color(*v_it, MyMesh::Color(r,g,b,al));
+    
+	}
+}
+
+void vertexLabelToFaceLabel(MyMesh &mesh)
+{
+	// Assign first vertex class label to the face label. 
+	// TODO (MAC): This could of course be done better
+	int vertexclass = 0;
+	MyMesh::FaceVertexIter fv_it;
+	for (MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it) {
+		for(fv_it=mesh.fv_iter(*f_it); fv_it.is_valid(); ++fv_it) {
+  		vertexclass = mesh.data(*fv_it).classification();
+  		break;
+  	}
+  	mesh.data(*f_it).setlabelid(static_cast<short>(vertexclass));
+  }
+}
+
+void vertexLabelToVertexColorICCV(MyMesh &mesh)
+{
+	int s;
+	for(MyMesh::VertexIter v_it=mesh.vertices_begin(); v_it!=mesh.vertices_end(); ++v_it)
+	{
+		s = mesh.data(*v_it).classification();
+		if(s==0) // Unknown
+		{
+			mesh.set_color(*v_it, MyMesh::Color(0 ,0, 0, s));
+		}
+		else if(s==1) //Mobile objects like planes, trains, cars, animals, and people
+		{
+			mesh.set_color(*v_it, MyMesh::Color(255, 0, 0, s));
+		}
+		else if(s==2) // High vegetation like trees (~>20cm)
+		{
+			mesh.set_color(*v_it, MyMesh::Color(0,255,0, s));
+		}
+		else if(s==3) // Natural ground (~<20cm)
+		{
+			mesh.set_color(*v_it, MyMesh::Color(205,133,63, s));
+		}
+		else if(s==4) // Ground-level man-made objects like pavement
+		{
+			mesh.set_color(*v_it, MyMesh::Color(255, 255, 0, s));
+		}
+		else if(s==5) // Buildings and man-made structures rising above ground-level
+		{
+			mesh.set_color(*v_it, MyMesh::Color(255, 255, 255, s));
+		}
+		else if(s==6) // Water
+		{
+			mesh.set_color(*v_it, MyMesh::Color(0, 0, 255, s));
+		}
 	}
 }
 
@@ -114,25 +195,33 @@ void faceLabelToFaceColorICCV(MyMesh &mesh)
 	for(MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it)
 	{
 		s=mesh.data(*f_it).labelid();
-		if(s==0) //Facade
+		if(s==0) // Unknown
 		{
-			mesh.set_color(*f_it, MyMesh::Color(150,0,150));
+			mesh.set_color(*f_it, MyMesh::Color(0 ,0, 0,s));
 		}
-		else if(s==1) //Ground
+		else if(s==1) //Mobile objects like planes, trains, cars, animals, and people
 		{
-			mesh.set_color(*f_it, MyMesh::Color(60,60,60));
+			mesh.set_color(*f_it, MyMesh::Color(255, 0, 0,s));
 		}
-		else if(s==2) //Vegetation
+		else if(s==2) // High vegetation like trees (~>20cm)
 		{
-			mesh.set_color(*f_it, MyMesh::Color(0,200,0));
+			mesh.set_color(*f_it, MyMesh::Color(0,255,0,s));
 		}
-		else if(s==3) //Roof
+		else if(s==3) // Natural ground (~<20cm)
 		{
-			mesh.set_color(*f_it, MyMesh::Color(200,200,0));
+			mesh.set_color(*f_it, MyMesh::Color(205,133,63,s));
 		}
-		else if(s==4) //Clutter
+		else if(s==4) // Ground-level man-made objects like pavement
 		{
-			mesh.set_color(*f_it, MyMesh::Color(0, 0,200));
+			mesh.set_color(*f_it, MyMesh::Color(255, 255, 0,s));
+		}
+		else if(s==5) // Buildings and man-made structures rising above ground-level
+		{
+			mesh.set_color(*f_it, MyMesh::Color(255, 255, 255,s));
+		}
+		else if(s==6) // Water
+		{
+			mesh.set_color(*f_it, MyMesh::Color(0, 0, 255,s));
 		}
 	}
 }
@@ -176,6 +265,7 @@ void faceLabelToFaceColorRandom(MyMesh &mesh)
 	    colorvec[i][0]=rand()%255;
 	    colorvec[i][1]=rand()%255;
 	    colorvec[i][2]=rand()%255;
+		  colorvec[i][2]=rand()%255;
 	}
 	for(MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it)
 	{

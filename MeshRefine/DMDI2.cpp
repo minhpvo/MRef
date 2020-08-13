@@ -164,7 +164,11 @@ double DMDI2::calcEnergy(cv::Mat& valimg, cv::Mat& ncimg)
 		{
 			if(valimg.at<unsigned char>(y,x)>0)
 			{
-				energy-=ncimg.at<float>(y,x);
+				double nc_val = std::abs(ncimg.at<float>(y, x));
+				if (std::isnan(nc_val)){
+					nc_val = 0;
+				}
+				energy -= nc_val;
 				count++;
 			}
 		}

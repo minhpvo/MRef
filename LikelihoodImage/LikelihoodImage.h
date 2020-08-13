@@ -28,9 +28,10 @@ class LikelihoodImage
 
 	// Debug function
 	void checkisOne( void );
+	void delocateImage();
     private:
 
-	void delocateImage();
+//	void delocateImage();
 	void allocateImage(const int rows, const int cols, const int labels);
 
 	int _cols;

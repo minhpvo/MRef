@@ -14,7 +14,7 @@ BASELIBPATH :=  -L${LIBPATH}
 ifeq ($(MODE), debug)
 GG = -g
 endif
-CC = g++ -fPIC $(GG) -O0 -v -fopenmp -fvisibility=hidden -Lusr/local/lib -std=c++11
+CC = g++ -fPIC $(GG) -O3 -Wall -fopenmp -fvisibility=hidden -Lusr/local/lib -std=c++11
 
 ### OPENMESH
 OPENMESHINCPATH := -I/home/centos/thirdparty/OpenMesh-6.2/installs/include
@@ -32,8 +32,15 @@ EIGENINCPATH := -I/usr/local/include/eigen3/
 
 ### Embree
 # GAH an initial `sudo /sbin/ldconfig -v` fixed this problem!!
-EMBREEINCPATH := -I/home/centos/thirdparty/embree-2.11.0.x86_64.linux/include
-EMBREELIBPATH := -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib -lembree -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib -ltbb -L/home/centos/thirdparty/embree/build/lib/libembree.so
+#EMBREEINCPATH := -I/home/centos/thirdparty/embree-2.11.0.x86_64.linux/include
+#EMBREELIBPATH := -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib/libembree.so -L/home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib -ltbb -L/home/centos/thirdparty/embree/build/lib/libembree.so
+EMBREEINCPATH := -I/usr/include
+EMBREELIBPATH := -L/usr/lib64 -lembree -L/usr/lib64 -ltbb
+#EMBREEINCPATH := -I/home/centos/thirdparty/embree/build/include -I/usr/include
+#EMBREELIBPATH := -L/home/centos/thirdparty/embree/build/lib/libembree.so -L/usr/lib64 -ltbb -ltbbmalloc
+# EMBREELIBPATH := -L/home/centos/thirdparty/embree/build/lib/libembree.so /home/centos/thirdparty/embree/build/lib/liblexers.a /home/centos/thirdparty/embree/build/lib/libsimd.a /home/centos/thirdparty/embree/build/lib/libsys.a -L/usr/lib64/libtbb.so
+#EMBREEINCPATH := -I/usr/local/include/ -I/home/centos/thirdparty/tbb2017_20170412oss/include
+#EMBREELIBPATH := -L/usr/local/lib64/libembree.so -L/home/centos/thirdparty/tbb2017_20170412oss/lib/libtbb.so
 
 ### Opencv
 OPENCVPATH := /usr/local

@@ -6,24 +6,49 @@
 
 struct MyTraits : public OpenMesh::DefaultTraits
 {
-	VertexAttributes(OpenMesh::Attributes::Status);
-	FaceAttributes(OpenMesh::Attributes::Status);
-	EdgeAttributes(OpenMesh::Attributes::Status);
 
-	 FaceTraits
-	 {
-	    	 private:
-			 short _labelid;
-			 int _buildingid;
+  // TODO (MAC): This is how you use double valued coordinates
+  // typedef OpenMesh::Vec3d Point;
+  typedef OpenMesh::Vec4uc Color;
 
-		 public:
-			FaceT() : _labelid(0), _buildingid(0) { }
-			const short& labelid() const {return _labelid; }
-		 	void setlabelid(const short& lid) { _labelid = lid; }
+  VertexAttributes(OpenMesh::Attributes::Status |
+  OpenMesh::Attributes::Color |
+  OpenMesh::Attributes::Normal);
+  FaceAttributes(OpenMesh::Attributes::Status |
+  OpenMesh::Attributes::Color);
+  EdgeAttributes(OpenMesh::Attributes::Status);
 
-			const int& buildingid() const {return _buildingid; }
-		 	void setbuildingid(const int& bid) { _buildingid = bid; }
-	 };
+
+  VertexTraits
+  {
+    private:
+    float _confidence;
+    int _classification;
+
+    public:
+    VertexT() : _classification(0), _confidence(0) { }
+
+    const int& confidence() const {return _confidence; }
+    void setconfidence(const float& vid) { _confidence = vid; }
+
+    const int& classification() const {return _classification; }
+    void setclassification(const int& vid) { _classification = vid; }
+  };
+
+  FaceTraits
+  {
+    private:
+    short _labelid;
+    int _buildingid;
+
+    public:
+    FaceT() : _labelid(0), _buildingid(0) { }
+    const short& labelid() const {return _labelid; }
+    void setlabelid(const short& lid) { _labelid = lid; }
+
+    const int& buildingid() const {return _buildingid; }
+    void setbuildingid(const int& bid) { _buildingid = bid; }
+  };
 
 
 };

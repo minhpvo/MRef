@@ -31,11 +31,13 @@ class ControlRefine
 	std::vector<float> _semweightvec;
 
 	bool _usesemanticsmooth;
-	std::vector<float> _smoothwaterweightvec;
-	std::vector<float> _smoothfacadeweightvec;
-	std::vector<float> _smoothgroundweightvec;
-	std::vector<float> _smoothroofweightvec;
-	std::vector<float> _smoothvegeweightvec;
+	std::vector<float> _smoothweightvecunknown;
+	std::vector<float> _smoothweightvecmobile;
+	std::vector<float> _smoothweightvectrees;
+	std::vector<float> _smoothweightvecground;
+	std::vector<float> _smoothweightvecpavement;
+	std::vector<float> _smoothweightvecbuilding;
+	std::vector<float> _smoothweightvecwater;
 
 	bool _usestraightedgegrad;
 	std::vector<float> _straightedgeweightvec;

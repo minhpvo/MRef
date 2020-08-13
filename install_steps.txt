@@ -1,0 +1,53 @@
+cd
+git clone https://github.com/Hivemapper/MRef.git
+mkdir thirdparty
+cd thirdparty
+
+# documentation in https://www.graphics.rwth-aachen.de/media/openmesh_static/Documentations/OpenMesh-6.2-Documentation/index.html
+wget https://www.graphics.rwth-aachen.de/media/openmesh_static/Releases/6.2/OpenMesh-6.2.tar.gz
+
+# wget https://github.com/embree/embree/releases/download/v2.11.0/embree-2.11.0.x86_64.linux.tar.gz
+
+wget https://github.com/oneapi-src/oneTBB/releases/download/2017_U6/tbb2017_20170412oss_lin.tgz
+
+tar xvzf OpenMesh-6.2.tar.gz
+#tar xvzf embree-2.11.0.x86_64.linux.tar.gz
+#source embree-3.11.0.x86_64.linux/embree-vars.sh
+
+tar xvzf tbb2017_20170412oss_lin.tgz
+
+
+cd /home/centos/thirdparty/OpenMesh-6.2/
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/home/centos/thirdparty/OpenMesh-6.2/installs -DBUILD_APPS=OFF -DCMAKE_BUILD_TYPE=Release ..
+make
+make install
+
+sudo yum install gtk3-devel
+
+cd /home/centos/thirdparty/embree-2.11.0.x86_64.linux/lib
+ln -s libtbb.so.2 libtbb.so
+
+
+sudo /sbin/ldconfig -v
+
+
+??? sudo yum install glfw-devel
+
+cd ~/thirdparty
+git clone https://github.com/embree/embree.git embree
+cd embree
+git checkout v2.11.0
+sudo yum install glfw-devel
+mkdir build
+cd build
+ccmake ..
+
+make
+sudo make install
+sudo /sbin/ldconfig -v
+
+
+
+# didn't do this source embree-3.11.0.x86_64.linux/embree-vars.sh

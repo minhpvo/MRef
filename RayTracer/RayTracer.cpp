@@ -19,7 +19,7 @@ RayTracer::RayTracer( MyMesh &mesh ) :
     _neg(false)
 {
 	//// Init the number of threads 
-	tbb::task_scheduler_init tbbinit(3);
+	tbb::task_scheduler_init tbbinit(16);
     	init();
     	setScene(mesh);
 }
@@ -111,6 +111,10 @@ void RayTracer::setView( const float tfar, const float tnear, const int rows, co
 
 	_idimg.create(_rows,_cols, CV_32S);
 	_xyzimg.create(_rows,_cols,CV_32FC3);
+	_uvimg.create(_rows,_cols,CV_32FC2);
+	_idimg.setTo(0);
+	_xyzimg.setTo(0.0);
+	_uvimg.setTo(0.0);
 
 	_Kinv=K.inverse();
 	_Rt=R.transpose();
@@ -157,7 +161,9 @@ int RayTracer::check(  std::vector< std::vector<float> > &verts )
 	{
 		X << verts[v][0] , verts[v][1], verts[v][2], 1.0;
 		x=P*X;
-		if( x(0)/x(2)<_cols && x(0)/x(2)>0 && x(1)/x(2)<_rows && x(1)/x(2)>0 ) std::cout<< "\n Vert Reprojected ";
+		if( x(0)/x(2)<_cols && x(0)/x(2)>0 && x(1)/x(2)<_rows && x(1)/x(2)>0 ) {
+            std::cout<< "\n Vert Reprojected ";
+        }
 	}
 }
 

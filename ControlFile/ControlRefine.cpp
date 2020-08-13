@@ -46,17 +46,23 @@ void ControlRefine::init()
 	_semweightvec.resize(8);
 	for(int i=0; i<8; i++) { _semweightvec[i]=0.2; }
 	_usesemanticsmooth=false;
-	_smoothwaterweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothwaterweightvec[i]=0.8; }
-	_smoothfacadeweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothfacadeweightvec[i]=0.2; }
-	_smoothgroundweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothgroundweightvec[i]=0.6; }
-	_smoothroofweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothroofweightvec[i]=0.1; }
-	_smoothvegeweightvec.resize(8);
-	for(int i=0; i<8; i++) { _smoothvegeweightvec[i]=0.0; }
-	
+
+	_smoothweightvecunknown.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecunknown[i]=0.0; }
+	_smoothweightvecmobile.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecmobile[i]=0.0; }
+	_smoothweightvectrees.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvectrees[i]=0.1; }
+	_smoothweightvecground.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecground[i]=0.2; }
+	_smoothweightvecpavement.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecpavement[i]=0.6; }
+	_smoothweightvecbuilding.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecbuilding[i]=0.2; }
+	_smoothweightvecwater.resize(8);
+	for(int i=0; i<8; i++) { _smoothweightvecwater[i]=0.8; }
+
+
 	_usestraightedgegrad=true;
 	_straightedgeweightvec.resize(8);
 	for(int i=0; i<8; i++) { _straightedgeweightvec[i]=0.3; }
@@ -85,11 +91,13 @@ void ControlRefine::writeFile(const std::string& name)
 	writer.writeVar("#UseSemanticData",_usesemanticdata);
 	writer.writeVec("#SemDataWeights",_semweightvec);
 	writer.writeVar("#UseSemanticSmooth", _usesemanticsmooth);
-	writer.writeVec("#SemSmoothWeightsWater",_smoothwaterweightvec);
-	writer.writeVec("#SemSmoothWeightsFacade",_smoothfacadeweightvec);
-	writer.writeVec("#SemSmoothWeightsGround",_smoothgroundweightvec);
-	writer.writeVec("#SemSmoothWeightsRoof",_smoothroofweightvec);
-	writer.writeVec("#SemSmoothWeightsVege",_smoothvegeweightvec);
+	writer.writeVec("#SemSmoothWeightsUnknown",_smoothweightvecunknown);
+	writer.writeVec("#SemSmoothWeightsMobile",_smoothweightvecmobile);
+	writer.writeVec("#SemSmoothWeightsTrees",_smoothweightvectrees);
+	writer.writeVec("#SemSmoothWeightsGround",_smoothweightvecground);
+	writer.writeVec("#SemSmoothWeightsPavement",_smoothweightvecpavement);
+	writer.writeVec("#SemSmoothWeightsBuilding",_smoothweightvecbuilding);
+	writer.writeVec("#SemSmoothWeightsWater",_smoothweightvecwater);
 	writer.writeVar("#UseStraightEdgeGrad",_usestraightedgegrad);
 	writer.writeVec("#StraightEdgeWeights",_straightedgeweightvec);
 	writer.writeVar("#UseMrfLabeling", _usemrflabelsmoothing);
@@ -108,7 +116,7 @@ void ControlRefine::readFile(const std::string& name)
 	ControlReader reader;
 
 	// Set the stuff to read
-	reader.setVar("#Verboselevel", &_verboselevel);
+	reader.setVar("#VerboseLevel", &_verboselevel);
 	reader.setVar("#StartPyr", &_startlevel);
 	reader.setVar("#EndPyr", &_endlevel);
 	reader.setVec("#RefineIterations",&_numitervec);
@@ -117,11 +125,13 @@ void ControlRefine::readFile(const std::string& name)
 	reader.setVar("#UseSemanticData", &_usesemanticdata);
 	reader.setVec("#SemDataWeights", &_semweightvec);
 	reader.setVar("#UseSemanticSmooth", &_usesemanticsmooth);
-	reader.setVec("#SemSmoothWeightsWater",&_smoothwaterweightvec);
-	reader.setVec("#SemSmoothWeightsFacade",&_smoothfacadeweightvec);
-	reader.setVec("#SemSmoothWeightsGround",&_smoothgroundweightvec);
-	reader.setVec("#SemSmoothWeightsRoof",&_smoothroofweightvec);
-	reader.setVec("#SemSmoothWeightsVege",&_smoothvegeweightvec);
+	reader.setVec("#SemSmoothWeightsUnknown",&_smoothweightvecunknown);
+	reader.setVec("#SemSmoothWeightsMobile",&_smoothweightvecmobile);
+	reader.setVec("#SemSmoothWeightsTrees",&_smoothweightvectrees);
+	reader.setVec("#SemSmoothWeightsGround",&_smoothweightvecground);
+	reader.setVec("#SemSmoothWeightsPavement",&_smoothweightvecpavement);
+	reader.setVec("#SemSmoothWeightsBuilding",&_smoothweightvecbuilding);
+	reader.setVec("#SemSmoothWeightsWater",&_smoothweightvecwater);
 	reader.setVar("#UseStraightEdgeGrad",&_usestraightedgegrad);
 	reader.setVec("#StraightEdgeWeights",&_straightedgeweightvec);
 	reader.setVar("#UseMrfLabeling",&_usemrflabelsmoothing);

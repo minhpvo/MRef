@@ -1,0 +1,1 @@
+mesh/trimmed_mesh.ply

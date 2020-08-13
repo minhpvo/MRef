@@ -29,6 +29,7 @@ class MeshRefine
 
 	// Processing of a single tile
 	void process();
+	double photoConsistency();
 
     private:
 

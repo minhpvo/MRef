@@ -3,9 +3,9 @@
 
 int main()
 {
-    	Orientation myfirstori;
-	std::string name("../data/firstori.or");
-	std::string outname("../data/lastori.or");
+  Orientation myfirstori;
+	std::string name("../data/ori/1.or");
+	std::string outname("./lastori.or");
 	//myfirstori.writeFile(name);
 	myfirstori.readFile(name);
 	Eigen::Vector3d vec(3,1); vec<< 1,2,3;

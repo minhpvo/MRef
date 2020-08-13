@@ -16,9 +16,15 @@ namespace MeshConv
 
 	void faceColorToFaceLabel(MyMesh &mesh);
 
-	void faceLabelToFaceColor(MyMesh &mesh);
+  void vertexAlphaToVertexLabel(MyMesh &mesh);
+
+  void vertexRGBToVertexGreyLabel(MyMesh &mesh);
+
+  void vertexLabelToFaceLabel(MyMesh &mesh);
 
 	void faceLabelToFaceColorRandom(MyMesh &mesh);
+
+  void vertexLabelToVertexColorICCV(MyMesh &mesh);
 
 	void faceLabelToFaceColorICCV(MyMesh &mesh);
 

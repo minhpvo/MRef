@@ -110,9 +110,9 @@ bool IOList::readFile ( const std::string &inputFile )
 
         }
         filestr.close();
-    }
-    else
-    {
+        return true;
+    } else {
     	std::cout<<"\nCould not open "<< inputFile;
+    	return false;
     }
 }

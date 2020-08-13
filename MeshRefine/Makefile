@@ -21,7 +21,8 @@ OBJECTS = DataCopy.o  GradThinPlate.o DMDI2.o GradCalcStereo.o MeshScaler.o View
 
 all: lib exe
 lib: $(OBJECTS) libgradcalcstereo.a
-exe: test_grad.o test_grad 
+test_grad: test_grad.o test_grad
+exe: Consistency.o Consistency
 
 .PHONY:  all
 
@@ -98,7 +99,18 @@ test_grad.o: test_grad.cpp
 test_grad: test_grad.o ${OBJECTS}
 	@echo ${cc_green}Link test_grad...${cc_nocolor}
 	${CC} ${CCFLAGS} -o meshrefine test_grad.o ${OBJECTS} ${LFLAGS}
-	@cp meshrefine ../bin
+	@mv meshrefine ../bin
+	@echo ${cc_green}...Done ${cc_nocolor}
+
+Consistency.o: Consistency.cpp
+	@echo ${cc_green}Compile Consistency.cpp...${cc_nocolor}
+	${CC} ${CFLAGS} -c Consistency.cpp ${IFLAGS}
+	@echo ${cc_green}... Done ${cc_nocolor}
+
+Consistency: Consistency.o ${OBJECTS}
+	@echo ${cc_green}Link Consistency...${cc_nocolor}
+	${CC} ${CCFLAGS} -o consistency Consistency.o ${OBJECTS} ${LFLAGS}
+	@mv consistency ../bin
 	@echo ${cc_green}...Done ${cc_nocolor}
 
 libgradcalcstereo.a : ${OBJECTS}

@@ -106,11 +106,18 @@ GradCalcStereo::GradCalcStereo
 	_rt0=new RayTracer(*_mesh);
     	_rt0->setView(_tfar,_tnear, *_ori0,false);
     	_rt0->traceRaysColumnWise();
+
+  _rt1=new RayTracer(*_mesh);
+	if(_smode==ON) {
+		_jaclabels1x = new LikelihoodImage();
+		_jaclabels1y = new LikelihoodImage();
+	}
+
 }
 
 void GradCalcStereo::setSecondView(	cv::Mat &img1,
 					LikelihoodImage* limage1,
-					Orientation* ori1 )
+					Orientation* ori1)
 {
 	// Set the members
 	_img1=img1;
@@ -130,13 +137,23 @@ void GradCalcStereo::setSecondView(	cv::Mat &img1,
 	_jacimg1x.create(_rows1,_cols1,CV_32F);
 	_jacimg1y.create(_rows1,_cols1,CV_32F);
 
-	if(_smode==ON)_jaclabels1x=new LikelihoodImage(_rows1,_cols1,_numlabels);
-	if(_smode==ON)_jaclabels1y=new LikelihoodImage(_rows1,_cols1,_numlabels);
 
-	// Set up the Raytracer
-	_rt1=new RayTracer(*_mesh);
-    	_rt1->setView(_tfar,_tnear, *_ori1,false);
-    	_rt1->traceRaysColumnWise();
+
+	if(_smode==ON) {
+		if (_jaclabels1x) {
+			_jaclabels1x->delocateImage();
+			_jaclabels1x = new LikelihoodImage(_rows1,_cols1,_numlabels);
+		}
+		if (_jaclabels1y) {
+			_jaclabels1y->delocateImage();
+			_jaclabels1y = new LikelihoodImage(_rows1,_cols1,_numlabels);
+		}
+
+	}
+
+//	// Set up the Raytracer
+  _rt1->setView(_tfar,_tnear, *_ori1,false);
+  _rt1->traceRaysColumnWise();
 }
 
 GradCalcStereo::~GradCalcStereo()
@@ -293,6 +310,7 @@ void GradCalcStereo::updateTIDImagesOcclusions
 {
 	_meandist=0;
 	int counter=0;
+	int nohitcounter=0;
 
     	float _SMALLVALL_TRACECONSISTENT=0.001;
     	float distpt, dist0;
@@ -305,7 +323,11 @@ void GradCalcStereo::updateTIDImagesOcclusions
 
 	Eigen::MatrixXd eP1=ori1.getP();
 	cv::Mat P1(3,4,CV_32F);
-	for(int r=0; r<3;r++) for(int c=0; c<4;c++) P1.at<float>(r,c)=eP1(r,c);
+	for(int r=0; r<3;r++) {
+		for(int c=0; c<4;c++) {
+			P1.at<float>(r,c)=eP1(r,c);
+		}
+	}
 
 	Eigen::Vector3d C0=ori0.getC();	
 
@@ -321,8 +343,8 @@ void GradCalcStereo::updateTIDImagesOcclusions
 		{
 			if(tid0.at<int>(y0,x0)>=0)
 			{
-			    	Xbuffer[0]=XYZ0.at<cv::Vec3f>(y0,x0)[0];
-			    	Xbuffer[1]=XYZ0.at<cv::Vec3f>(y0,x0)[1];
+			  Xbuffer[0]=XYZ0.at<cv::Vec3f>(y0,x0)[0];
+			  Xbuffer[1]=XYZ0.at<cv::Vec3f>(y0,x0)[1];
 				Xbuffer[2]=XYZ0.at<cv::Vec3f>(y0,x0)[2];
 				Xbuffer[3]=1.0;
 
@@ -338,6 +360,7 @@ void GradCalcStereo::updateTIDImagesOcclusions
 				{ // Is pt seen in second img?
 
 			    	    tid0.at<int>(y0,x0)=-1;
+			    	    nohitcounter++;
 				    continue;
 				}
 				else
@@ -345,11 +368,11 @@ void GradCalcStereo::updateTIDImagesOcclusions
 					// Bilinear interpolation is missing
 				    	distpt=	pow(Xbuffer[0]-XYZ1.at<cv::Vec3f>(y1int,x1int)[0],2.0)+
 					    	pow(Xbuffer[1]-XYZ1.at<cv::Vec3f>(y1int,x1int)[1],2.0)+
-						pow(Xbuffer[2]-XYZ1.at<cv::Vec3f>(y1int,x1int)[2],2.0);
+					    	pow(Xbuffer[2]-XYZ1.at<cv::Vec3f>(y1int,x1int)[2],2.0);
 
 				    	dist0=	pow(Xbuffer[0]-C0(0),2.0)+
 					    	pow(Xbuffer[1]-C0(1),2.0)+
-						pow(Xbuffer[2]-C0(2),2.0);
+						    pow(Xbuffer[2]-C0(2),2.0);
 
 					// Check distance
 					if(fabs(distpt)>dist0*_SMALLVALL_TRACECONSISTENT)
@@ -369,6 +392,13 @@ void GradCalcStereo::updateTIDImagesOcclusions
 				}
 			}
 		}
+	}
+	if(_verboselevel>=2) {
+		std::cout << "====================================" << std::endl;
+		std::cout << " img-img not-hitting mesh counter: " << nohitcounter << std::endl;
+		std::cout << " img-img     hitting mesh counter: " << counter << std::endl;
+		std::cout << " img-mesh _meandist:  " << _meandist / (double) counter << std::endl;
+		std::cout << "====================================" << std::endl;
 	}
 	_meandist/=(double)counter;
 }
@@ -874,7 +904,9 @@ double GradCalcStereo::process()
 }
 }
 	timer.stop();
-	if(_verboselevel>=2){ std::cout<<"\n Raytracing stuff ["<<timer.getTimeSec()<<" sec]"; }
+	if(_verboselevel>=2) {
+		std::cout<<" Raytracing stuff ["<<timer.getTimeSec()<<" sec]" << std::endl;
+	}
 	// Update the masks and get undistortion maps ... (ocv GPU implemetation available)
 	cv::Mat map0x(rows0,cols0,CV_32F);
 	cv::Mat map0y(rows0,cols0,CV_32F);
@@ -887,14 +919,18 @@ double GradCalcStereo::process()
 	// Compute more global helpers
 	calcHelpers(*_ori0, *_ori1, xyz0, tid0);
 	timer.stop();
-	if(_verboselevel>=2){ std::cout<<"\n calcHelpers done ["<<timer.getTimeSec()<<" sec]"; }
+	if(_verboselevel>=2) {
+		std::cout<<" calcHelpers done ["<<timer.getTimeSec()<<" sec]" << std::endl;
+	}
 
 	//ImgIO::saveVisLikeli(*_limage1,2,"/home/mathias/AlmostTrash/test.png"); exit(1);
 	// Compute the image similarity and the constrast sensitive weights
 	timer.reset(); timer.start();
 	energy=calcSimilarity(smode, tid0);
 	timer.stop();
-	if(_verboselevel>=2){ std::cout<<"\n calcSim done ["<<timer.getTimeSec()<<" sec]"; }
+	if(_verboselevel>=2) {
+		std::cout<<" calcSim done ["<<timer.getTimeSec()<<" sec]" << std::endl;
+	}
 	
 	//cv::imwrite("/home/mathias/AlmostTrash/test.png", _jacimg10x);
 
@@ -903,7 +939,9 @@ double GradCalcStereo::process()
 	updateGrad(uvimg0,tid0,*_ori0);
 	timer.stop();
 
-	if(_verboselevel>=2){ std::cout<<"\n update grad done ["<<timer.getTimeSec()<<" sec]"; }
+	if(_verboselevel>=2) {
+		std::cout<<" update grad done ["<<timer.getTimeSec()<<" sec]" << std::endl;
+	}
 	return energy;
 }
 

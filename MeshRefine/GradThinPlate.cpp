@@ -65,11 +65,16 @@ void GradThinPlate::weightClassSpecificPenalties(std::vector<float>& classpenalt
 	unsigned short curlabel;
 	MyMesh::Point grad;
 	int noneidx=classpenalties.size();
+	// this is _numclasses-length, with the smoothweightvec[class] penalties
+	// so noneidx is 1 more than any of the possible real label
 
 	// Figure label for vert
 	int idx=0;
 	for (MyMesh::VertexIter v_it=_mesh->vertices_begin(); v_it!=_mesh->vertices_end(); ++v_it)
 	{
+		// TODO (MAC): This is just a large number to signal that we're
+		//   looking at the first face attached to the vertex, before we iterate through the 
+		//   rest of the faces touching that vertex
 		label=65535;
 	    	for(MyMesh::VertexFaceIter vf_it=_mesh->vf_iter(*v_it); vf_it.is_valid(); ++vf_it)
 		{
@@ -83,22 +88,32 @@ void GradThinPlate::weightClassSpecificPenalties(std::vector<float>& classpenalt
 				curlabel=_mesh->data(*vf_it).labelid();
 				if(curlabel!=label) 
 				{
-					label=noneidx;
-					break;
+					// this means the face label differs from the very first face that was checked
+					label=noneidx; //set face label to the impossible label
+					break; //don't need to look at the rest of the faces sharing this vertex, then
+					       // since we already know at least 1 is different
 				}
 		    	}
 		}
 
 	    	// scale
+		//done looking at adjacent faces -- they're either all the same (and label is that shared label), 
+		//  or there's at least 1 that's different, and label == noneidx
 	    	if(label!=noneidx)
 		{
+			// all the face classes around this vertex have the same label. 
+			// Gradient is scaled proportionally to that label's smoothness weight
+			// Note: all penalties in [0,1) right now so this decreases the size of the gradient
+			// and it's important if penalty is <1 or >1 !
 			penalty=classpenalties[label];
-			_grad(idx,0)*=penalty;
+			_grad(idx,0)*=penalty; 
 			_grad(idx,1)*=penalty;
 			_grad(idx,2)*=penalty;
 		}
 		else
 		{
+			// the classes around this vertex point are NOT the same; 
+			//   0-out gradient at this vertex
 			_grad(idx,0)=0;
 			_grad(idx,1)=0;
 			_grad(idx,2)=0;
