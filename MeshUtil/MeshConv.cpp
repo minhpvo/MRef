@@ -142,15 +142,34 @@ void vertexLabelToFaceLabel(MyMesh &mesh)
 	// Assign first vertex class label to the face label. 
 	// TODO (MAC): This could of course be done better
 	int vertexclass = 0;
+//	unsigned char r, g, b, al;
 	MyMesh::FaceVertexIter fv_it;
 	for (MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it) {
 		for(fv_it=mesh.fv_iter(*f_it); fv_it.is_valid(); ++fv_it) {
   		vertexclass = mesh.data(*fv_it).classification();
+			// vertexcolor = mesh.color(*fv_it);
+//			const MyMesh::Color& c=mesh.color(*fv_it);
+//			r=c[0]; g=c[1]; b=c[2]; al=c[3];
   		break;
   	}
   	mesh.data(*f_it).setlabelid(static_cast<short>(vertexclass));
+//  	mesh.set_color(*f_it, MyMesh::Color(r,g,b,al));
   }
 }
+
+
+void vertexColorToFaceColorICCV(MyMesh &mesh)
+	{
+		// Assign first vertex RGB color to the face color.
+		// TODO (MAC): This could of course be done better
+		MyMesh::FaceVertexIter fv_it;
+		for (MyMesh::FaceIter f_it=mesh.faces_begin(); f_it!=mesh.faces_end(); ++f_it) {
+			for(fv_it=mesh.fv_iter(*f_it); fv_it.is_valid(); ++fv_it) {
+				mesh.set_color(*f_it, mesh.color(*fv_it));
+				break;
+			}
+		}
+	}
 
 void vertexLabelToVertexColorICCV(MyMesh &mesh)
 {
