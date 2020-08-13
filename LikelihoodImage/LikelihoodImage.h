@@ -13,7 +13,7 @@ class LikelihoodImage
 
 	float& getData(int y, int x, int label);
 
-	void loadImage(const std::string &name);
+	void loadImage(const std::string &name, const int rows, const int cols, const int labels);
 	void saveImage(const std::string &name);
 	void loadImageMaros(const std::string &name);
 

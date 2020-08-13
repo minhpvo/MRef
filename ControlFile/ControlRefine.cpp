@@ -17,17 +17,15 @@ ControlRefine::~ControlRefine()
 
 void ControlRefine::init()
 {
+	_verboselevel=0;
+	_nrows = 0;
+	_ncols = 0;
+	_nlabels = 7;
 	_startlevel=0;
-
 	_endlevel=0;
-
 	_usesemanticsmooth=false;
-
 	_tnear=0.1;
 	_tfar=2000.0;
-
-	_verboselevel=0;
-
 	// Number iterations per level
 	_numitervec.resize(8);
 	for(int i=0; i<8; i++) { _numitervec[i]=22; }
@@ -83,6 +81,9 @@ void ControlRefine::writeFile(const std::string& name)
 	ControlWriter writer(name);
 
 	writer.writeVar("#VerboseLevel", _verboselevel);
+	writer.writeVar("#nPixelsImgHeight",_nrows);
+	writer.writeVar("#nPixelsImgWidth",_ncols);
+	writer.writeVar("#nClasses",_nlabels);
 	writer.writeVar("#StartPyr", _startlevel);
 	writer.writeVar("#EndPyr", _endlevel);
 	writer.writeVec("#RefineIterations",_numitervec);
@@ -117,6 +118,9 @@ void ControlRefine::readFile(const std::string& name)
 
 	// Set the stuff to read
 	reader.setVar("#VerboseLevel", &_verboselevel);
+	reader.setVar("#nPixelsImgHeight", &_nrows);
+	reader.setVar("#nPixelsImgWidth", &_ncols);
+	reader.setVar("#nClasses", &_nlabels);
 	reader.setVar("#StartPyr", &_startlevel);
 	reader.setVar("#EndPyr", &_endlevel);
 	reader.setVec("#RefineIterations",&_numitervec);

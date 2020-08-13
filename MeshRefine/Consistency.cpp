@@ -159,13 +159,13 @@ void prepareOutput(const std::string basepath, const IOList &tilelist,
     std::string outfilename = basepath;
     outfilename.append("/out/");
     outfilename.append(tilelist.getNameWithoutEnding(tilenum[i]));
-    outfilename.append("_output.obj");
+    outfilename.append("_output");
     outfilenames.push_back(outfilename);
 
     std::string infilename = basepath;
     infilename.append("/out/");
     infilename.append(tilelist.getNameWithoutEnding(tilenum[i]));
-    infilename.append("_input.obj");
+    infilename.append("_input");
     infilenames.push_back(infilename);
   }
 }
@@ -232,21 +232,21 @@ int main(int argc, char *argv[]) {
 
   MyMesh mesh; // mesh with original vertices
   std::string meshname(meshlist.getElement(pyr_id));
-  MeshIO::readMesh(mesh, meshname, true, false, true, false, true);
+  MeshIO::readMesh(mesh, meshname, true, true, true, false, true);
 
-  mesh.request_face_colors();
-  mesh.request_vertex_colors();
 
   // takes the 4th channel of colors and turns it into the classification value
   MeshConv::vertexAlphaToVertexLabel(mesh);
   // sets face classification to the first vertex class
   MeshConv::vertexLabelToFaceLabel(mesh);
   // just to check color IO
-//    MeshConv::vertexLabelToVertexColorICCV(mesh);
-  MeshConv::faceLabelToFaceColorICCV(mesh);
 
-  std::cout << " Saving input mesh face colors to file " << std::endl;
-  MeshIO::writeMesh(mesh, infilenames[pyr_id], true, true, true, false);
+  std::cout << " Saving input mesh Class face colors to file " << std::endl;
+  MeshConv::faceLabelToFaceColorICCV(mesh);
+  MeshIO::writeMesh(mesh, infilenames[pyr_id]+"_class.obj", true, true, true, false);
+  std::cout << " Saving input mesh RGB face colors to file " << std::endl;
+  MeshIO::writeMesh(mesh, infilenames[pyr_id]+"_RGB"+".ply", true, true, true, false);
+
 
 //  int mac = 0;
 //  for (MyMesh::VertexIter v_it = mesh.vertices_begin(); v_it != mesh.vertices_end(); ++v_it) {
@@ -300,13 +300,15 @@ int main(int argc, char *argv[]) {
   MeshRefine refmod(&mesh, &mmd, &ctr, &adjacency, &imglist, &likelilist, &orilist);
   refmod.process();
 
-  std::cout << "\nSaving..." << outfilenames[pyr_id] << std::endl;
+  std::cout << "\nSaving..." << outfilenames[pyr_id]+".obj" << std::endl;
   mesh.request_face_colors();
   mesh.request_vertex_colors();
+  std::cout << " Saving mesh RGB face colors to file " << std::endl;
+  MeshIO::writeMesh(mesh, outfilenames[pyr_id]+"_RGB"+".ply", true, true, true, false);
   std::cout << " Saving face labels to face colors " << std::endl;
   MeshConv::faceLabelToFaceColorICCV(mesh);
-  std::cout << " Saving mesh face colors to file " << std::endl;
-  MeshIO::writeMesh(mesh, outfilenames[pyr_id], true, true, true, false);
+  std::cout << " Saving mesh Class face colors to file " << std::endl;
+  MeshIO::writeMesh(mesh, outfilenames[pyr_id]+"_class.obj", true, true, true, false);
 
 //  mac = 0;
 //  for (MyMesh::VertexIter v_it = mesh.vertices_begin(); v_it != mesh.vertices_end(); ++v_it) {
