@@ -16,7 +16,7 @@
 namespace MeshIO {
 
   void readMesh(MyMesh &ommesh, std::string savename, bool hasvertcolor, bool hasfacecolor, bool hasvertnormal,
-                bool hasfacetexture, bool hasclasses) {
+                bool hasfacetexture) {
 
     // Check which extension
     std::string extension = boost::filesystem::extension(savename);
@@ -59,13 +59,8 @@ namespace MeshIO {
       ommesh.request_face_texture_index();
       ropt += OpenMesh::IO::Options::FaceTexCoord;
     }
-    if (hasclasses) {
-      std::cout << "MeshIO.cpp: Make sure that the classifications (uint8_t) are saved with column name  'alpha' "
-                << std::endl;
-    }
-
     if (extension == ".obj") {
-
+      // Note ONLY ply files work right now on our data!! (as ascii)
       OpenMesh::IO::_OBJReader_();
       if (!OpenMesh::IO::read_mesh(ommesh, savename.c_str(), ropt)) {
         std::cerr << "Error loading obj mesh from file " << savename << std::endl;
@@ -84,8 +79,7 @@ namespace MeshIO {
 
   void writeMesh(const MyMesh &mesh, const std::string &savename,
                  const bool hasvertcolor, const bool hasfacecolor,
-                 const bool hasvertnormal, const bool hasfacetexture,
-                 const bool hasclasses) {
+                 const bool hasvertnormal, const bool hasfacetexture) {
 
     // Check which extension
     std::string extension = boost::filesystem::extension(savename);
