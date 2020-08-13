@@ -61,7 +61,11 @@ float MeshMRF::DataOneDiff(float likelihood) {
 
 // Data cost: differnce to one 1-x
 float MeshMRF::DataLog(float likelihood) {
-  return (-1.0) * log10(likelihood);
+  // add 0.5 so that any class with a likelihood of 0.5 or above (i.e., most
+  // probable class) doesn't have an added penalty. Also lowers the overall weight
+  // of the penalty, now capped at log(0.5) = 0.3
+  float ll = (-1.0) * log10(likelihood + 0.5);
+  return std::max( ll, 0.0f);
 }
 
 // Prior data cost: for different classes define
@@ -378,7 +382,7 @@ void MeshMRF::assignMinLabels() {
 void MeshMRF::process(const std::vector <std::string> &imglist, const std::vector <std::string> &orilist,
                       const int maxiterations) {
   // For each face compute the data cost of each label
-  std::cout << " Zeroed out -- Assigning previous costs to faces..." << std::endl;
+  std::cout << " Assigning costs to faces..." << std::endl;
   PRSTimer timer;
   timer.start();
   calcDataCosts(imglist, orilist);
