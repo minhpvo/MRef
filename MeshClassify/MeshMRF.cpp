@@ -197,8 +197,10 @@ bool MeshMRF::hitsModel(Orientation &ori) {
   x /= x(2);
   if ((ceil(x(0)) < cols - 1 && floor(x(0)) > 0) && (ceil(x(1)) < rows - 1 && floor(x(1)) > 0)) { return true; }
 
-  // TODO: (MAC) forcing this true
-  std::cout << "MeshMRF:192 -- Forcing image to return within bounding box" << std::endl;
+  // TODO: (MAC) forcing this true, which means all class likelihood images get processed
+  //  I am not positive the logic was working as intended, because without the forced true,
+  //  relevant files weren't being parsed, which makes me think the bounding boxes weren't
+  //  being scaled properly
   return true;
 }
 
@@ -341,7 +343,7 @@ void MeshMRF::fillGraph() {
     for (int f = 0; f < _numfaces; f++) {
       costvec[f].site = f;
       if (_facehitcount[f] > 0) {
-        // TODO (MAC) This is where the class-specific costs are calculated
+        // This is where the class-specific costs are calculated
         // _facepriorcosts relates face normals to non-right-angle penalties
         // _facesizevec/av I'm pretty sure just weights by face surface area
         // the _facelabelcosts line simply takes likelihoods and turns them
@@ -354,7 +356,7 @@ void MeshMRF::fillGraph() {
         // Add the data prior
         costvec[f].cost += _facepriorcosts[f][l];
         costvec[f].cost *= _facesizevec[f] / _avfacesize;
-        // TODO (MAC) We need to include a cost of switching classes in
+        // We could include a cost of switching classes in
         //   general. This can be done by adding a cost to all classes except
         //   the argmax class from _facelabelcosts
 

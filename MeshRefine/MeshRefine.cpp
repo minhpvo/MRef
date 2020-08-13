@@ -203,8 +203,6 @@ void MeshRefine::process() {
         if (_verboselevel >= 0) {
           std::cout << "\n||> Semantic Optimization <||" << std::endl;
         }
-        // TODO (MAC) Number of labels is hard-coded here -- this, and the
-        //  likelihood class -- should be watched for specific row/column/label sizes
         MeshMRF meshmrf(_mesh, _mmd, nlabels);
         meshmrf.process(_imglistsem->getList(), _orilist->getList(), _ctr->_nummrfitervec[pyr]);
       }
@@ -333,7 +331,7 @@ void MeshRefine::process() {
         penalties[4] = _ctr->_smoothweightvecpavement[pyr]; // pavement
         penalties[5] = _ctr->_smoothweightvecbuilding[pyr]; // building
         penalties[6] = _ctr->_smoothweightvecwater[pyr]; // water
-        // TODO: This is where gradient updates get set at each mesh vertex, based on 
+        // This is where gradient updates get set at each mesh vertex, based on
         //    whether or not all the faces sharing that vertex have the same class 
         // (grad *= penalty, so I guess decreasing the magnitude since penalty <1),
         //    OR if they are NOT all the same label, set the gradient to 0 at that vertex.

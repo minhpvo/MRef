@@ -72,8 +72,10 @@ namespace MeshIO {
       }
     } else if (extension == ".ply") {
       OpenMesh::IO::_PLYReader_();
-      //  TODO: this needs to be a check, but for now my ply file is ascii, so read it as such
-      //  ropt+=OpenMesh::IO::Options::Binary;
+      //  For now, ply files must be ascii, or else we can't read in the
+      //    classifications. Make sure that the classifications (type uint8_t)
+      //    are saved with column name 'alpha' as we need to hijack the 4th color
+      //    channel in order to save it to the mesh vertex
       if (!OpenMesh::IO::read_mesh(ommesh, savename.c_str(), ropt)) {
         std::cerr << "Error loading ply mesh from file " << savename << std::endl;
       }
