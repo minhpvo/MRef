@@ -19,12 +19,8 @@ mkdir $datafolder/img
 mkdir $datafolder/likeli
 mkdir $datafolder/ori
 
-# hijacked script to get the camera transformations. This could for sure be its own script now though
-bazel run //hive/hive_scripts/lib/mesh:mesh_extractor -- $datafolder/temp $model_id
-# hijacked script to get the classifications assigned to the model mesh. This also might not be necessary
-#  anymore, and we may be able to just transform mesh.ply instead. Originally, we wanted to
-#  save the likelihoods for each class...that's no longer needed.
-bazel run //hive/hive_scripts/lib/mesh:single_model_mesh -- $model_id $datafolder/temp 0 1 0 2>&1 | tee $datafolder/temp/smm_010.log
+# Script to get the transformed camera data and normalized mesh in floaating pt ascii
+bazel run //hive/hive_scripts/lib/mesh:meshref_datagen -- $datafolder/temp $model_id
 
 # grab the matches folder to extract geometirc matches file
 sudo cp /mnt/HM/$hostname/hive/waggle/$model_id/reconstruction/matches.tar.gz $datafolder/temp
@@ -74,6 +70,9 @@ find mesh -name "*.ply" > $datafolder/meshlist.txt
 # create orientation files, and the image adjacency matrix. The adjacency
 #  matrix script relies on the imglist.txt created in hive_to_ori, so it
 #  needs to run first
+# Note that for these 2 python scripts, you need to manually change the folder
+#  string at the top so that you're looking in the right place. 
+#  It's terrible; I'm sorry, I'll fix it eventually
 # call: python hive_to_ori.py
 #  you should now have: an imglist.txt, orilist.txt, likelilist.txt
 #   and a populates ori/ folder with the camera matrices for each image

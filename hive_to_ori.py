@@ -1,8 +1,11 @@
 import json
 from itertools import chain
 
-data_folder   = 'data_sr_high/'
-camera_file   = data_folder+"camera_data_tf_1.json"
+
+# TODO (MAC) This definitely needs to be read in as a CLI
+#  esp. since the paths haven't been checked for consistency
+data_folder   = 'data_sr_high/' 
+camera_file   = data_folder+"camera_data_tf.json"
 ori_folder    = "ori/"
 img_folder    = "img/"
 likeli_folder = "likeli/"

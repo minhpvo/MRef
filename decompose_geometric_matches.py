@@ -3,6 +3,9 @@ import json
 import numpy as np
 import scipy.sparse as sparse
 
+
+# TODO (MAC) This definitely needs to be read in as a CLI
+#  esp. since the paths haven't been checked for consistency
 data_folder        = "data_sr_low/"
 geo_matches_file   = data_folder+"geometric_matches"
 geo_matches_text   = data_folder+"geometric_matches_decomp.txt"
