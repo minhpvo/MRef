@@ -136,10 +136,10 @@ MRF_NAMESPACE_BEGIN
       vertex.labels.push_back(label);
       ENERGY_TYPE data_cost = costs[i].cost;
       vertex.data_costs.push_back(data_cost);
-      // TODO(MAC) Here's where the min-cost label is chosen. But the cost
-      //   needs to be relative to the "cost" of changing an existing label;
-      //   as it stands, there's no cost to change a label value, so it could
-      //   just pick the first of several 0's if the point is not checked
+      // Here's where the min-cost label is chosen. As it stands, there's
+      //   no cost to change a label value, so it could just pick
+      //   the first of several 0's if the point is not penalized in any
+      //   class (all costs = 0)
 // This stores the minimum cost and label guess some init
       if (data_cost < vertex.data_cost) {
         vertex.label = label;

@@ -180,8 +180,6 @@ void LikelihoodImage::loadImage(const std::string &name, const int rows, const i
   }
 
   uint8_t *ptr = (uint8_t *) buffer;
-//	 TODO: (MAC) This is just hard-coded for now to make it work
-//    but it definitely needs to be fixed
   _rows = rows;
   _cols = cols;
   _labels = labels;

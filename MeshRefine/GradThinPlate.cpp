@@ -72,7 +72,7 @@ void GradThinPlate::weightClassSpecificPenalties(std::vector<float>& classpenalt
 	int idx=0;
 	for (MyMesh::VertexIter v_it=_mesh->vertices_begin(); v_it!=_mesh->vertices_end(); ++v_it)
 	{
-		// TODO (MAC): This is just a large number to signal that we're
+		// This is just a large number to signal that we're
 		//   looking at the first face attached to the vertex, before we iterate through the 
 		//   rest of the faces touching that vertex
 		label=65535;

@@ -232,7 +232,7 @@ int main(int argc, char *argv[]) {
 
   MyMesh mesh; // mesh with original vertices
   std::string meshname(meshlist.getElement(pyr_id));
-  MeshIO::readMesh(mesh, meshname, true, true, true, false, true);
+  MeshIO::readMesh(mesh, meshname, true, true, true, false);
 
 
   // takes the 4th channel of colors and turns it into the classification value
