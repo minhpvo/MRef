@@ -74,6 +74,10 @@ inference --image=$datafolder/segmentation_image_src.txt --results=$datafolder/s
 cd $datafolder
 find mesh -name "*_f.ply" > $datafolder/meshlist.txt
 
+# remove the temp folders:
+rm -rf $datafolder/temp
+rm -rf $datafolder/$model_id/
+
 # TODO:
 # create orientation files, and the image adjacency matrix. The adjacency
 #  matrix script relies on the imglist.txt created in hive_to_ori, so it
