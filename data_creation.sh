@@ -10,7 +10,7 @@
 model_id='5efe41c0505bb7b34c3fc3a1'
 hostnme='mac-dev-127'
 # where I want to keep all my output, that then serves as meshref data input
-datafolder='/home/centos/MRef/data_sr_low'
+datafolder='/home/centos/hivemapper/meshref_data_mac'
 
 # make meshref directories
 mkdir $datafolder/temp
@@ -20,13 +20,19 @@ mkdir $datafolder/likeli
 mkdir $datafolder/ori
 
 # Script to get the transformed camera data and normalized mesh in floaating pt ascii
-bazel run //hive/hive_scripts/lib/mesh:meshref_datagen -- $datafolder/temp $model_id
+bazel run //hive/hive_scripts/lib/mesh:meshref_converter -- $datafolder/temp $model_id
+
+# copy transformed camera json file from the meshref_converter script over to the datafolder
+cp $datafolder/temp/$model_id/camera_data_tf.json $datafolder
+# copy transformed/normalized mesh from the meshref_converter script
+#   over to the mesh folder in datafolder
+mv $datafolder/*_f.ply $datafolder/mesh
 
 # grab the matches folder to extract geometirc matches file
 sudo cp /mnt/HM/$hostname/hive/waggle/$model_id/reconstruction/matches.tar.gz $datafolder/temp
 tar -xf $datafolder/temp/matches.tar.gz -C $datafolder/temp
 cp $datafolder/temp/geometric_matches $datafolder
-cp $datafolder/temp/temp/sfm_data.json $datafolder
+cp $datafolder/temp/sfm_data.json $datafolder
 
 #  grab the frames folder to extract the png frames
 sudo cp /mnt/HM/$hostname/hive/waggle/$model_id/data/frames.tar.gz $datafolder/temp
@@ -63,10 +69,12 @@ rm *.png
 inference --image=$datafolder/segmentation_image_src.txt --results=$datafolder/segmentation_image_dst.txt --scale=100 --graph=segmentation_model.pb --root_dir=/usr/etc/hive/segmentation/;
 
 # make meshlist.txt file with the path to the input ply file
+# this ply input needs to be the ply file you got from meshref_converter, named
+# something like {model_id}_f.ply. I've added the '_f' here to reflect that
 cd $datafolder
-find mesh -name "*.ply" > $datafolder/meshlist.txt
+find mesh -name "*_f.ply" > $datafolder/meshlist.txt
 
-# TODO: 
+# TODO:
 # create orientation files, and the image adjacency matrix. The adjacency
 #  matrix script relies on the imglist.txt created in hive_to_ori, so it
 #  needs to run first
